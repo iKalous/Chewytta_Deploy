@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="web.project.chewytta.mapper.UserMapper">
+
+    <!-- 根据ID查询用户 -->
+    <select id="selectById" resultType="web.project.chewytta.model.User">
+        SELECT * FROM users WHERE id = #{id}
+    </select>
+
+    <!-- 根据用户名查询用户 -->
+    <select id="selectByUsername" resultType="web.project.chewytta.model.User">
+        SELECT * FROM users WHERE username = #{username}
+    </select>
+
+    <!-- 查询所有用户 -->
+    <select id="selectAll" resultType="web.project.chewytta.model.User">
+        SELECT * FROM users
+    </select>
+
+    <!-- 插入新用户 -->
+    <insert id="insert">
+        INSERT INTO users (username, password, nickname, phone, email, avatar, balance, role, created_at)
+        VALUES (
+                   #{username},
+                   #{password},
+                   #{nickname},
+                   #{phone},
+                   #{email},
+                   #{avatar},
+                   #{balance},
+                   #{role},
+                   #{createdAt}
+               )
+    </insert>
+
+
+    <!-- 更新用户信息 -->
+    <update id="update">
+        UPDATE users
+        SET
+            username = #{user.username},
+            password = #{user.password},
+            nickname = #{user.nickname},
+            phone = #{user.phone},
+            email = #{user.email},
+            avatar = #{user.avatar},
+            balance = #{user.balance},
+            role = #{user.role}
+        WHERE id = #{user.id}
+    </update>
+
+    <!-- 删除用户 -->
+    <delete id="deleteById">
+        DELETE FROM users WHERE id = #{id}
+    </delete>
+
+    <!-- 用户登录验证 -->
+    <select id="loginByAccount" resultType="web.project.chewytta.model.User">
+        SELECT * FROM users
+        WHERE username = #{account} OR phone = #{account} OR email = #{account}
+    </select>
+
+
+    <!-- 修改密码 -->
+    <update id="updatePassword">
+        UPDATE users
+        SET password = #{newPassword}
+        WHERE id = #{id}
+    </update>
+
+    <!-- 修改昵称 -->
+    <update id="updateNickname">
+        UPDATE users
+        SET nickname = #{nickname}
+        WHERE id = #{id}
+    </update>
+
+    <update id="updateAvatar">
+        UPDATE users SET avatar = #{avatarUrl} WHERE id = #{id}
+    </update>
+
+    <!-- 更新用户余额 -->
+    <update id="updateBalance">
+        UPDATE users
+        SET balance = #{balance}
+        WHERE id = #{id}
+    </update>
+
+</mapper>

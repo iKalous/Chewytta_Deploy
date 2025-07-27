@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Promise Test</title>
+</head>
+<body>
+    <h1>Promise Test</h1>
+    <script type="module">
+        // 测试Promise
+        const testPromise = () => {
+            return new Promise((resolve) => {
+                setTimeout(() => {
+                    resolve('Promise works!');
+                }, 1000);
+            });
+        };
+
+        async function testAsync() {
+            const result = await testPromise();
+            console.log(result);
+            document.body.innerHTML += `<p>${result}</p>`;
+        }
+
+        testAsync();
+    </script>
+</body>
+</html>

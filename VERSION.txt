@@ -1,0 +1,50 @@
+Chewytta Docker 部署包 v1.0.0
+构建日期: 2025-07-27
+构建者: GitHub Copilot
+
+系统组件版本:
+- Spring Boot: 3.3.13
+- Java: 17
+- React: 18+
+- TypeScript: Latest
+- MySQL: 8.0
+- Redis: Latest
+- Nginx: Latest
+- Docker Compose: 3.8+
+
+包含功能:
+✅ 完整的前后端分离架构
+✅ 用户注册和登录系统
+✅ 盲盒商品管理
+✅ 在线抽取功能
+✅ 收藏系统
+✅ 评论系统
+✅ 管理后台
+✅ 文件上传功能
+✅ 数据持久化
+✅ 缓存优化
+
+部署要求:
+- Windows 10/11 (64位)
+- 至少 4GB RAM
+- Docker Desktop
+- 2GB 可用磁盘空间
+
+支持的操作:
+- 一键启动/关闭
+- 自动环境检查
+- 容器状态监控
+- 数据备份恢复
+- 日志查看
+
+技术特性:
+- 容器化部署
+- 微服务架构
+- 反向代理
+- 负载均衡就绪
+- 生产环境优化
+- 安全配置
+- CORS支持
+- JWT身份验证
+- BCrypt密码加密
+- SQL注入防护

@@ -1,0 +1,52 @@
+spring:
+  application:
+    name: Chewytta
+  datasource:
+    url: jdbc:mysql://localhost:3306/chewytta
+    username: root
+    password: matrix67
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  data:
+    redis:
+      host: 127.0.0.1
+      port: 6379
+#      password: matrix67
+      lettuce:
+        pool:
+          max-active: 8
+          max-wait: 2000ms
+          max-idle: 4
+          min-idle: 1
+    cache:
+      redis:
+        timeout: 3000ms
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 10MB
+      enabled: true
+
+# 文件上传配置
+file:
+  upload:
+    base-path: ../ChewyApp/
+    admin-content-path: ../AdminContent/
+    user-data-path: ../ChewyApp/userdata/
+    url-prefix: /uploads/**
+    max-file-size: 5242880  # 5MB
+    allowed-extensions: [jpg, jpeg, png, gif, bmp, webp]
+
+mybatis:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    mapUnderscoreToCamelCase: true
+  mapper-locations: classpath:mapper/**/*.xml
+
+logging:
+  level:
+    org.springframework.jdbc.support.JdbcTransactionManager: debug
+    org.springframework.beans.factory: debug
+
+jwt:
+  secret-key: 3AvVhdsgjWTdGxU4ajXlqiu2ZMECAfGRovuJvPzhwoE=
+  expiration-time: 86400000

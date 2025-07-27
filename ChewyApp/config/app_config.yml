@@ -1,0 +1,59 @@
+# Chewy App 客户端配置
+# 
+# 这个配置文件定义了客户端应用的基本设置
+# 当用户下载客户端后，应用会根据这个配置初始化本地环境
+
+app:
+  name: "ChewyApp"
+  version: "1.0.0"
+  
+# 本地目录配置
+directories:
+  # 应用数据根目录（相对于用户目录）
+  app_data: "Documents/ChewyApp/"
+  
+  # 管理员内容目录（用于存储从服务器同步的内容）
+  admin_content: "Documents/AdminContent/"
+  
+  # 缓存目录
+  cache: "AppData/Local/ChewyApp/Cache/"
+  
+  # 日志目录
+  logs: "AppData/Local/ChewyApp/Logs/"
+
+# 图片处理配置
+images:
+  # 支持的格式
+  supported_formats: ["jpg", "jpeg", "png", "gif", "bmp", "webp"]
+  
+  # 缓存设置
+  cache_enabled: true
+  cache_size_mb: 100
+  
+  # 压缩设置
+  auto_compress: true
+  max_width: 1920
+  max_height: 1080
+  quality: 85
+
+# 同步设置
+sync:
+  # 是否自动同步管理员内容
+  auto_sync_admin_content: true
+  
+  # 同步间隔（分钟）
+  sync_interval: 30
+  
+  # 低网速模式
+  low_bandwidth_mode: false
+
+# 服务器连接
+server:
+  # 默认服务器地址
+  default_url: "http://localhost:8080"
+  
+  # 连接超时（秒）
+  timeout: 30
+  
+  # 重试次数
+  retry_count: 3

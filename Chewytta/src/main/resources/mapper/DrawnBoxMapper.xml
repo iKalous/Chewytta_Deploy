@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="web.project.chewytta.mapper.DrawnBoxMapper">
+
+    <insert id="insertDrawnBox">
+        INSERT INTO drawn_boxes (user_id, box_id, item_id, price, draw_date)
+        VALUES (#{userId}, #{boxId}, #{itemId}, #{price}, NOW())
+    </insert>
+
+    <select id="selectByUserId" parameterType="long" resultType="web.project.chewytta.model.DrawnBox">
+        SELECT id, user_id, box_id, item_id, price, draw_date, draw_time 
+        FROM drawn_boxes WHERE user_id = #{userId}
+    </select>
+
+    <!-- 获取用户所有订单，并关联盲盒和款式信息 -->
+    <select id="selectByUserIdWithDetails" parameterType="long"
+            resultType="web.project.chewytta.model.DrawnBox">
+        SELECT d.id, d.user_id AS userId, d.box_id AS boxId, d.item_id AS itemId, d.price,
+               COALESCE(d.draw_date, d.draw_time) AS drawTime,
+               b.name AS boxName, i.name AS itemName, i.image AS itemImage
+        FROM drawn_boxes d
+                 LEFT JOIN blind_boxes b ON d.box_id = b.id
+                 LEFT JOIN items i ON d.item_id = i.id
+        WHERE d.user_id = #{userId}
+    </select>
+
+    <select id="hasUserDrawnItem" parameterType="map" resultType="boolean">
+        SELECT COUNT(*) > 0 
+        FROM drawn_boxes 
+        WHERE user_id = #{userId} AND item_id = #{itemId}
+    </select>
+
+</mapper>

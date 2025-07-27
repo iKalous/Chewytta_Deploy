@@ -1,0 +1,441 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Google+Sans:wght@300;400;500;700&family=Roboto:wght@300;400;500;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Material Design 3 色彩系统 */
+:root {
+  /* 主色调 - 浅紫色系 */
+  --primary: #8b5cf6;
+  --primary-variant: #7c3aed;
+  --primary-light: #a78bfa;
+  --primary-dark: #6d28d9;
+
+  /* 次要色调 - 蓝紫色 */
+  --secondary: #3b82f6;
+  --secondary-variant: #2563eb;
+  --secondary-light: #60a5fa;
+  --secondary-dark: #1d4ed8;
+
+  /* 表面色彩 - 紫色渐变 */
+  --surface: #ffffff;
+  --surface-variant: #f8fafc;
+  --surface-container: #faf5ff;
+  --surface-container-high: #f3e8ff;
+  --surface-container-highest: #ede9fe;
+
+  /* 背景 */
+  --background: #fefbff;
+  --background-variant: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 50%, #f3e8ff 100%);
+
+  /* 文字颜色 */
+  --on-surface: #1e293b;
+  --on-surface-variant: #64748b;
+  --on-primary: #ffffff;
+  --on-secondary: #ffffff;
+
+  /* 边框 */
+  --outline: #d8b4fe;
+  --outline-variant: #f1f5f9;
+
+  /* 状态色彩 */
+  --error: #dc2626;
+  --warning: #d97706;
+  --success: #059669;
+
+  /* 阴影 */
+  --shadow-1: 0 1px 2px 0 rgba(139, 92, 246, 0.1), 0 1px 3px 1px rgba(139, 92, 246, 0.05);
+  --shadow-2: 0 1px 2px 0 rgba(139, 92, 246, 0.15), 0 2px 6px 2px rgba(139, 92, 246, 0.1);
+  --shadow-3: 0 4px 8px 3px rgba(139, 92, 246, 0.1), 0 1px 3px 0 rgba(139, 92, 246, 0.15);
+  --shadow-4: 0 6px 10px 4px rgba(139, 92, 246, 0.1), 0 2px 3px 0 rgba(139, 92, 246, 0.15);
+
+  /* 圆角 */
+  --radius-xs: 4px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+
+  /* 字体 */
+  font-family: 'Google Sans', 'Roboto', system-ui, -apple-system, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  /* 动画 */
+  --transition-fast: 150ms cubic-bezier(0.4, 0.0, 0.2, 1);
+  --transition-standard: 300ms cubic-bezier(0.4, 0.0, 0.2, 1);
+  --transition-emphasized: 500ms cubic-bezier(0.05, 0.7, 0.1, 1.0);
+}
+
+/* 实用类 */
+.bg-primary {
+  background-color: var(--primary) !important;
+}
+
+.text-primary {
+  color: var(--primary) !important;
+}
+
+.border-primary {
+  border-color: var(--primary) !important;
+}
+
+.bg-surface {
+  background-color: var(--surface) !important;
+}
+
+.text-on-surface {
+  color: var(--on-surface) !important;
+}
+
+.shadow-material {
+  box-shadow: var(--shadow-2);
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--background);
+  color: var(--on-surface);
+  font-family: 'Google Sans', 'Roboto', system-ui, -apple-system, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Material Design 按钮样式 */
+.btn-filled {
+  padding: 0.75rem 1.5rem;
+  border-radius: 9999px;
+  font-weight: 500;
+  font-size: 0.875rem;
+  background-color: var(--primary);
+  color: var(--on-primary);
+  box-shadow: var(--shadow-1);
+  transition: all var(--transition-fast);
+  border: none;
+  cursor: pointer;
+}
+
+.btn-filled:hover {
+  box-shadow: var(--shadow-2);
+  transform: translateY(-1px);
+}
+
+.btn-filled:active {
+  transform: translateY(0);
+  box-shadow: var(--shadow-1);
+}
+
+.btn-outlined {
+  padding: 0.75rem 1.5rem;
+  border-radius: 9999px;
+  font-weight: 500;
+  font-size: 0.875rem;
+  background-color: transparent;
+  color: var(--primary);
+  border: 1px solid var(--outline);
+  transition: all var(--transition-fast);
+  cursor: pointer;
+}
+
+.btn-outlined:hover {
+  background-color: rgba(25, 118, 210, 0.04);
+  border-color: var(--primary);
+}
+
+.btn-text {
+  padding: 0.5rem 1rem;
+  border-radius: 9999px;
+  font-weight: 500;
+  font-size: 0.875rem;
+  background-color: transparent;
+  color: var(--primary);
+  border: none;
+  transition: all var(--transition-fast);
+  cursor: pointer;
+}
+
+.btn-text:hover {
+  background-color: rgba(25, 118, 210, 0.04);
+}
+
+/* Material Design 卡片样式 */
+.card {
+  background-color: var(--surface);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-1);
+  transition: all var(--transition-standard);
+  overflow: hidden;
+}
+
+.card:hover {
+  box-shadow: var(--shadow-2);
+  transform: translateY(-2px);
+}
+
+.card-elevated {
+  background-color: var(--surface);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-2);
+  transition: all var(--transition-standard);
+  overflow: hidden;
+}
+
+.card-elevated:hover {
+  box-shadow: var(--shadow-3);
+  transform: translateY(-4px);
+}
+
+/* Material Design 输入框样式 */
+.input-outlined {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid;
+  background-color: var(--surface);
+  color: var(--on-surface);
+  border-color: var(--outline);
+  transition: all var(--transition-fast);
+  outline: none;
+}
+
+.input-outlined:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.12);
+}
+
+.input-filled {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  border: 0;
+  background-color: var(--surface-variant);
+  color: var(--on-surface);
+  transition: all var(--transition-fast);
+  outline: none;
+}
+
+.input-filled:focus {
+  background-color: var(--surface);
+  box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.12);
+}
+
+/* 表面容器 */
+.surface {
+  background-color: var(--surface);
+  color: var(--on-surface);
+}
+
+.surface-variant {
+  background-color: var(--surface-variant);
+  color: var(--on-surface-variant);
+}
+
+.surface-container {
+  background-color: var(--surface-container);
+  color: var(--on-surface);
+}
+
+/* 文字样式 - Material Design Typography */
+.text-display-large {
+  font-size: 3.5rem;
+  line-height: 4rem;
+  font-weight: 400;
+}
+
+.text-display-medium {
+  font-size: 2.8rem;
+  line-height: 3.25rem;
+  font-weight: 400;
+}
+
+.text-display-small {
+  font-size: 2.25rem;
+  line-height: 2.75rem;
+  font-weight: 400;
+}
+
+.text-headline-large {
+  font-size: 2rem;
+  line-height: 2.5rem;
+  font-weight: 400;
+}
+
+.text-headline-medium {
+  font-size: 1.75rem;
+  line-height: 2.25rem;
+  font-weight: 400;
+}
+
+.text-headline-small {
+  font-size: 1.5rem;
+  line-height: 2rem;
+  font-weight: 400;
+}
+
+.text-title-large {
+  font-size: 1.375rem;
+  line-height: 1.75rem;
+  font-weight: 500;
+}
+
+.text-title-medium {
+  font-size: 1rem;
+  line-height: 1.5rem;
+  font-weight: 500;
+}
+
+.text-title-small {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 500;
+}
+
+.text-body-large {
+  font-size: 1rem;
+  line-height: 1.5rem;
+  font-weight: 400;
+}
+
+.text-body-medium {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 400;
+}
+
+.text-body-small {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-weight: 400;
+}
+
+.text-label-large {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 500;
+}
+
+.text-label-medium {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-weight: 500;
+}
+
+.text-label-small {
+  font-size: 0.6875rem;
+  line-height: 1rem;
+  font-weight: 500;
+}
+
+/* 滚动条样式 */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--surface-variant);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--outline);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--on-surface-variant);
+}
+
+/* 加载动画 */
+.loading-spinner {
+  width: 24px;
+  height: 24px;
+  border: 2px solid var(--outline);
+  border-top: 2px solid var(--primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* 涟漪效果 */
+.ripple {
+  position: relative;
+  overflow: hidden;
+}
+
+.ripple::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.3;
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.ripple:active::before {
+  width: 300px;
+  height: 300px;
+}
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+}
+
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #f9f9f9;
+  /* 浅灰背景，更柔和 */
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+
+button:hover {
+  border-color: #646cff;
+}
+
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #000000;
+    background-color: #ffffff;
+  }
+
+  a:hover {
+    color: #747bff;
+  }
+
+  button {
+    background-color: #f9f9f9;
+  }
+}

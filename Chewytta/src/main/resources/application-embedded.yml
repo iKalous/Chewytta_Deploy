@@ -1,0 +1,85 @@
+spring:
+  application:
+    name: Chewytta
+  profiles:
+    active: embedded
+  
+  # 内嵌 H2 数据库配置
+  datasource:
+    url: jdbc:h2:file:./data/chewytta;DB_CLOSE_ON_EXIT=FALSE;AUTO_RECONNECT=TRUE;MODE=MySQL;DB_CLOSE_DELAY=-1
+    username: sa
+    password: 
+    driver-class-name: org.h2.Driver
+    
+  # H2 控制台配置（开发调试用）
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+      settings:
+        web-allow-others: true
+        
+  # JPA 配置
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    database-platform: org.hibernate.dialect.H2Dialect
+    
+  # 缓存配置（使用内存缓存替代 Redis）
+  cache:
+    type: simple
+    cache-names: [user-cache, box-cache, item-cache]
+    
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 10MB
+      enabled: true
+
+# 文件上传配置（调整为相对路径）
+file:
+  upload:
+    base-path: ./ChewyApp/
+    admin-content-path: ./AdminContent/
+    user-data-path: ./ChewyApp/userdata/
+    url-prefix: /uploads/**
+    max-file-size: 5242880  # 5MB
+    allowed-extensions: [jpg, jpeg, png, gif, bmp, webp]
+
+mybatis:
+  configuration:
+    log-impl: org.apache.ibatis.logging.nologging.NoLoggingImpl
+    mapUnderscoreToCamelCase: true
+  mapper-locations: classpath:mapper/**/*.xml
+
+# 生产环境日志配置
+logging:
+  level:
+    root: WARN
+    com.chewytta: INFO
+  pattern:
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+  file:
+    name: ./logs/chewytta.log
+
+jwt:
+  secret-key: 3AvVhdsgjWTdGxU4ajXlqiu2ZMECAfGRovuJvPzhwoE=
+  expiration-time: 86400000
+
+# 服务器配置
+server:
+  port: 8088
+  servlet:
+    context-path: /
+  compression:
+    enabled: true
+  
+# 内嵌前端静态资源配置
+spring:
+  web:
+    resources:
+      static-locations: classpath:/static/,classpath:/public/
+      cache-period: 31536000
+  mvc:
+    static-path-pattern: /**

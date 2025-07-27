@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="web.project.chewytta.mapper.BlindBoxMapper">
+
+    <!-- 查询所有盲盒 -->
+    <select id="selectAllBoxes" resultType="web.project.chewytta.model.BlindBox">
+        SELECT * FROM blind_boxes
+    </select>
+
+    <!-- 根据ID查询盲盒 -->
+    <select id="selectBoxById" parameterType="long" resultType="web.project.chewytta.model.BlindBox">
+        SELECT * FROM blind_boxes WHERE id = #{id}
+    </select>
+
+    <!-- 插入新盲盒 -->
+    <insert id="insertBox" parameterType="web.project.chewytta.model.BlindBox" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO blind_boxes (name, image, price, stock, is_published, description)
+        VALUES (#{name}, #{image}, #{price}, #{stock}, #{isPublished}, #{description})
+    </insert>
+
+    <!-- 更新盲盒信息 -->
+    <update id="updateBox" parameterType="web.project.chewytta.model.BlindBox">
+        UPDATE blind_boxes
+        SET name = #{name},
+            image = #{image},
+            price = #{price},
+            stock = #{stock},
+            is_published = #{isPublished},
+            description = #{description}
+        WHERE id = #{id}
+    </update>
+
+    <!-- 删除盲盒 -->
+    <delete id="deleteBox" parameterType="long">
+        DELETE FROM blind_boxes WHERE id = #{id}
+    </delete>
+
+    <!-- 根据名称模糊搜索盲盒（只搜索已上架的盲盒，支持名称和描述搜索） -->
+    <select id="searchBoxesByName" parameterType="string" resultType="web.project.chewytta.model.BlindBox">
+        SELECT * FROM blind_boxes
+        WHERE (name LIKE CONCAT('%', #{keyword}, '%') OR description LIKE CONCAT('%', #{keyword}, '%'))
+        AND is_published = TRUE
+        ORDER BY 
+            CASE 
+                WHEN name LIKE CONCAT('%', #{keyword}, '%') THEN 1
+                ELSE 2
+            END,
+            name ASC
+    </select>
+
+
+</mapper>
