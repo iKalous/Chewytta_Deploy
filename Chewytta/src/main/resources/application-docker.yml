@@ -25,13 +25,15 @@ spring:
       host: ${SPRING_REDIS_HOST:redis}
       port: ${SPRING_REDIS_PORT:6379}
       password: ${SPRING_REDIS_PASSWORD:redis123456}
-      timeout: 2000ms
+      timeout: 5000ms
+      connect-timeout: 5000ms
       lettuce:
         pool:
           max-active: 8
           max-idle: 8
           min-idle: 0
-          max-wait: -1ms
+          max-wait: 3000ms
+        shutdown-timeout: 5000ms
 
   # 文件上传配置
   servlet:
