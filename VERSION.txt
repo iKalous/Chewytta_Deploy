@@ -1,6 +1,6 @@
 Chewytta Docker 部署包 v1.0.0
 构建日期: 2025-07-27
-构建者: GitHub Copilot
+构建者: iKalous
 
 系统组件版本:
 - Spring Boot: 3.3.13

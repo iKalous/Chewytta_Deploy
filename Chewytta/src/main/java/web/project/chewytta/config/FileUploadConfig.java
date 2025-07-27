@@ -11,13 +11,13 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class FileUploadConfig implements WebMvcConfigurer {
 
     // 文件上传基础路径（可在application.yml中配置）
-    private String basePath = "../ChewyApp/";
+    private String basePath = "./ChewyApp/";
 
     // 管理员内容目录
-    private String adminContentPath = "../AdminContent/";
+    private String adminContentPath = "./AdminContent/";
 
     // 用户数据目录
-    private String userDataPath = "../ChewyApp/userdata/";
+    private String userDataPath = "./ChewyApp/userdata/";
 
     // 访问URL前缀
     private String urlPrefix = "/uploads/**";

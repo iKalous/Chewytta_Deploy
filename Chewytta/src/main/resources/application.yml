@@ -29,9 +29,9 @@ spring:
 # 文件上传配置
 file:
   upload:
-    base-path: ../ChewyApp/
-    admin-content-path: ../AdminContent/
-    user-data-path: ../ChewyApp/userdata/
+    base-path: ./ChewyApp/
+    admin-content-path: ./AdminContent/
+    user-data-path: ./ChewyApp/userdata/
     url-prefix: /uploads/**
     max-file-size: 5242880  # 5MB
     allowed-extensions: [jpg, jpeg, png, gif, bmp, webp]

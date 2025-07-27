@@ -213,10 +213,113 @@ netstat -ano | findstr :6379
 3. 重启数据库容器: `docker-compose restart mysql`
 
 #### Q6: 图片上传后无法显示
+**问题现象:**
+- 管理员上传的盲盒图片显示500错误
+- 用户头像上传后无法显示或显示404错误
+- 重启容器后之前可显示的图片变成无法显示
+
 **解决方案:**
-1. 检查 AdminContent 文件夹权限
-2. 重启前端容器: `docker-compose restart frontend`
-3. 清除浏览器缓存
+1. **确认volumes映射正确:**
+   ```bash
+   # 检查docker-compose.yml中的volumes配置
+   volumes:
+     - ./ChewyApp:/app/ChewyApp
+     - ./AdminContent:/app/AdminContent
+   ```
+
+2. **检查nginx配置:**
+   - 确认nginx.conf包含了 `/uploads` 和 `/admin-content` 的代理配置
+   - 重启前端容器: `docker-compose restart frontend`
+
+3. **权限问题处理:**
+   ```bash
+   # Windows下检查文件夹权限
+   # 确保AdminContent和ChewyApp文件夹可写
+   ```
+
+4. **清除浏览器缓存并重新测试**
+
+**预防措施:**
+- 确保在停止容器前，重要的图片文件已正确保存在宿主机的映射目录中
+- 定期备份 `./AdminContent` 和 `./ChewyApp` 目录
+
+#### Q7: 用户头像功能异常
+**问题现象:**
+- 用户上传头像后显示404错误
+- 头像路径显示为 `/uploads/userdata/avatars/...` 但无法访问
+
+**解决方案:**
+1. **检查nginx代理配置:**
+   ```bash
+   # 确认nginx.conf包含uploads路径代理
+   location /uploads {
+       proxy_pass http://backend:8080;
+       # ...其他代理配置
+   }
+   ```
+
+2. **验证文件存储:**
+   ```bash
+   # 检查ChewyApp目录结构
+   ls ./ChewyApp/userdata/avatars/
+   ```
+
+3. **重启相关服务:**
+   ```bash
+   docker-compose restart frontend
+   docker-compose restart backend
+   ```
+
+#### Q8: 重启后上传的图片消失
+**问题现象:**
+- 重启Docker容器后，之前上传的图片无法显示
+- 宿主机目录中找不到上传的图片文件
+- 浏览器显示500或404错误
+
+**问题分析:**
+这通常是Docker数据持久化配置问题。虽然docker-compose.yml配置了volumes映射，但可能存在以下情况：
+
+**解决方案:**
+1. **验证文件映射状态:**
+   ```bash
+   # 运行文件持久化检查工具
+   双击: 🔄 文件持久化检查.bat
+   ```
+
+2. **检查volumes配置:**
+   ```yaml
+   # 确认docker-compose.yml中包含以下配置
+   backend:
+     volumes:
+       - ./ChewyApp:/app/ChewyApp
+       - ./AdminContent:/app/AdminContent
+   ```
+
+3. **手动验证文件同步:**
+   ```bash
+   # 检查容器内文件
+   docker exec chewytta-backend ls /app/AdminContent/boxes/covers/
+   
+   # 检查宿主机文件
+   dir AdminContent\boxes\covers\
+   ```
+
+4. **重新初始化数据目录:**
+   ```bash
+   # 停止服务
+   docker-compose down
+   
+   # 确保目录存在
+   mkdir AdminContent ChewyApp 2>nul
+   
+   # 重新启动
+   docker-compose up -d --build
+   ```
+
+**预防措施:**
+- 定期检查 `./AdminContent` 和 `./ChewyApp` 目录是否包含最新上传的文件
+- 使用 `🔄 文件持久化检查.bat` 工具定期验证文件同步状态
+- 重要数据建议额外备份到其他位置
 
 ### 🔧 维护操作
 
