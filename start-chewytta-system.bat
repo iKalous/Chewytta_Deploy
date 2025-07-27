@@ -1,9 +1,52 @@
 @echo off
+setlocal enabledelayedexpansion
 chcp 65001 >nul
 echo ===============================================
 echo    Chewytta System One-Click Start Script
 echo ===============================================
 echo.
+
+:: Check deployment readiness
+echo [PRELIMINARY] Checking deployment readiness...
+if not exist "Chewytta\target\Chewytta-0.0.1-SNAPSHOT.jar" (
+    echo Warning: Backend JAR file not found!
+    echo    Please run "prepare-for-deployment.bat" first
+    set /p "choice=Do you want to run preparation now? (Y/n): "
+    if /i "!choice!" neq "n" (
+        echo Running preparation script...
+        call prepare-for-deployment.bat
+        if %errorlevel% neq 0 (
+            echo Preparation failed!
+            pause
+            exit /b 1
+        )
+    ) else (
+        echo Cannot proceed without JAR file
+        pause
+        exit /b 1
+    )
+)
+
+if not exist "chewytta_fronted\dist" (
+    echo Warning: Frontend build not found!
+    echo    Please run "prepare-for-deployment.bat" first
+    set /p "choice=Do you want to run preparation now? (Y/n): "
+    if /i "!choice!" neq "n" (
+        echo Running preparation script...
+        call prepare-for-deployment.bat
+        if %errorlevel% neq 0 (
+            echo Preparation failed!
+            pause
+            exit /b 1
+        )
+    ) else (
+        echo Cannot proceed without frontend build
+        pause
+        exit /b 1
+    )
+)
+
+echo Deployment readiness check passed
 
 :: Check if Docker is installed
 echo [1/5] Checking Docker environment...
