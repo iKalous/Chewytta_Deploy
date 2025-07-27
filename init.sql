@@ -90,7 +90,32 @@ CREATE TABLE IF NOT EXISTS `comments` (
   FOREIGN KEY (`box_id`) REFERENCES `blind_boxes` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- 注意：不在这里创建默认用户，因为DefaultUserInitService会在启动时动态创建
--- 这样可以确保密码使用正确的BCrypt加密
+-- 创建默认管理员用户
+-- 密码 '123456' 的BCrypt加密结果（兼容Spring Boot）
+INSERT IGNORE INTO `users` (
+    `username`, 
+    `nickname`, 
+    `password`, 
+    `phone`, 
+    `email`, 
+    `avatar`, 
+    `balance`, 
+    `role`, 
+    `created_at`
+) VALUES (
+    'root',
+    '系统管理员',
+    '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',
+    '13800000000',
+    'admin@chewytta.com',
+    '/admin-content/system/defaults/admin_avatar.png',
+    0.00,
+    'admin',
+    NOW()
+);
+
+-- 确保有至少一个管理员用户，方便系统使用
+-- 用户名: root
+-- 密码: 123456
 
 SET FOREIGN_KEY_CHECKS = 1;

@@ -27,7 +27,28 @@ public class DefaultUserInitService implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        initializeDefaultAdmin();
+        // 添加延迟和重试机制，确保数据库完全就绪
+        int maxRetries = 5;
+        int retryDelay = 2000; // 2秒
+
+        for (int i = 0; i < maxRetries; i++) {
+            try {
+                System.out.println("=== 尝试检查/初始化默认管理员用户 (第" + (i + 1) + "次) ===");
+                initializeDefaultAdmin();
+                return; // 成功后退出
+            } catch (Exception e) {
+                System.err.println("❌ 第" + (i + 1) + "次初始化失败: " + e.getMessage());
+                if (i == maxRetries - 1) {
+                    System.err.println("❌ 达到最大重试次数，用户初始化失败。");
+                    System.err.println("💡 建议：如果是数据库连接问题，请检查MySQL容器是否正常启动");
+                    // 不抛出异常，让应用继续启动，因为init.sql可能已经创建了用户
+                    System.err.println("⚠️  应用将继续启动，如果init.sql已创建用户，系统仍可正常使用");
+                } else {
+                    System.out.println("⏳ " + retryDelay / 1000 + "秒后重试...");
+                    Thread.sleep(retryDelay);
+                }
+            }
+        }
     }
 
     /**
@@ -43,11 +64,12 @@ public class DefaultUserInitService implements CommandLineRunner {
             if (existingRoot == null) {
                 // 创建默认 root 用户
                 createDefaultRootUser();
-                System.out.println("✅ 默认管理员用户 'root' 创建成功");
+                System.out.println("✅ 默认管理员用户 'root' 创建成功（通过应用初始化）");
                 System.out.println("🔑 默认密码: 123456");
                 System.out.println("⚠️  请在首次登录后修改密码");
             } else {
                 System.out.println("✅ 默认管理员用户 'root' 已存在");
+                System.out.println("💡 可能是通过init.sql或之前的初始化创建的");
 
                 // 检查密码是否是BCrypt格式，如果不是则重置
                 String currentPassword = existingRoot.getPassword();
@@ -64,7 +86,7 @@ public class DefaultUserInitService implements CommandLineRunner {
                         System.out.println("⚠️  检测到 root 用户密码不是默认密码");
                         System.out.println("💡 如需重置为默认密码 '123456'，请联系开发者");
                     } else {
-                        System.out.println("✅ 默认密码验证正确");
+                        System.out.println("✅ 默认密码验证正确，用户可以使用 root/123456 登录");
                     }
                 }
             }
@@ -72,8 +94,9 @@ public class DefaultUserInitService implements CommandLineRunner {
             System.out.println("======================");
 
         } catch (Exception e) {
-            System.err.println("❌ 初始化默认管理员用户时发生错误: " + e.getMessage());
-            e.printStackTrace();
+            System.err.println("❌ 检查默认管理员用户时发生错误: " + e.getMessage());
+            // 重新抛出异常，触发重试机制
+            throw new RuntimeException("用户初始化检查失败", e);
         }
     }
 
