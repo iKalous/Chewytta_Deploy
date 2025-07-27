@@ -28,21 +28,30 @@ public class DefaultUserInitService implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         // 添加延迟和重试机制，确保数据库完全就绪
-        int maxRetries = 5;
-        int retryDelay = 2000; // 2秒
+        int maxRetries = 8; // 增加重试次数
+        int retryDelay = 3000; // 增加延迟到3秒
+
+        System.out.println("🚀 开始初始化默认管理员用户...");
 
         for (int i = 0; i < maxRetries; i++) {
             try {
-                System.out.println("=== 尝试检查/初始化默认管理员用户 (第" + (i + 1) + "次) ===");
+                System.out.println("=== 尝试检查/初始化默认管理员用户 (第" + (i + 1) + "/" + maxRetries + "次) ===");
                 initializeDefaultAdmin();
+                System.out.println("🎉 用户初始化检查完成！");
                 return; // 成功后退出
             } catch (Exception e) {
                 System.err.println("❌ 第" + (i + 1) + "次初始化失败: " + e.getMessage());
                 if (i == maxRetries - 1) {
                     System.err.println("❌ 达到最大重试次数，用户初始化失败。");
-                    System.err.println("💡 建议：如果是数据库连接问题，请检查MySQL容器是否正常启动");
-                    // 不抛出异常，让应用继续启动，因为init.sql可能已经创建了用户
-                    System.err.println("⚠️  应用将继续启动，如果init.sql已创建用户，系统仍可正常使用");
+                    System.err.println("� 可能的原因：");
+                    System.err.println("   1. MySQL 容器启动较慢，数据库未完全就绪");
+                    System.err.println("   2. 网络连接问题");
+                    System.err.println("   3. 数据库配置错误");
+                    System.err.println("💡 解决方案：");
+                    System.err.println("   1. 等待几分钟后重启系统");
+                    System.err.println("   2. 检查 docker-compose 日志");
+                    System.err.println("   3. 确保 Docker Desktop 正常运行");
+                    System.err.println("⚠️  应用将继续启动，但可能无法登录，请检查上述建议后重试");
                 } else {
                     System.out.println("⏳ " + retryDelay / 1000 + "秒后重试...");
                     Thread.sleep(retryDelay);
@@ -83,8 +92,10 @@ public class DefaultUserInitService implements CommandLineRunner {
                 } else {
                     // 验证密码是否正确
                     if (!passwordEncoder.matches("123456", existingRoot.getPassword())) {
-                        System.out.println("⚠️  检测到 root 用户密码不是默认密码");
-                        System.out.println("💡 如需重置为默认密码 '123456'，请联系开发者");
+                        System.out.println("⚠️  检测到 root 用户密码不是默认密码 '123456'");
+                        System.out.println("� 自动重置为默认密码以确保用户可以正常登录...");
+                        resetRootPassword(existingRoot);
+                        System.out.println("✅ root 用户密码已重置为默认密码: 123456");
                     } else {
                         System.out.println("✅ 默认密码验证正确，用户可以使用 root/123456 登录");
                     }
