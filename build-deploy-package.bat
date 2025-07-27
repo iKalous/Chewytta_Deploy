@@ -34,10 +34,44 @@ set DATETIME=%date:~0,4%%date:~5,2%%date:~8,2%_%time:~0,2%%time:~3,2%%time:~6,2%
 set DATETIME=%DATETIME: =0%
 set OUTPUT=Chewytta-Docker-Deploy-%DATETIME%.zip
 
-if "%COMPRESSOR%"=="7z" (
-    7z a -tzip "%OUTPUT%" * -x!*.bat
+:: Ensure frontend dist exists for deployment
+if not exist "chewytta_fronted\dist" (
+    echo Warning: Frontend dist directory not found!
+    echo Building frontend for deployment...
+    cd chewytta_fronted
+    if not exist "node_modules" (
+        echo Installing dependencies...
+        call npm install
+        if %errorlevel% neq 0 (
+            echo Error: npm install failed
+            cd ..
+            pause
+            exit /b 1
+        )
+    )
+    echo Building frontend...
+    call npm run build
+    if %errorlevel% neq 0 (
+        echo Error: npm build failed
+        cd ..
+        pause
+        exit /b 1
+    )
+    cd ..
 ) else (
-    winrar a -afzip "%OUTPUT%" * -x*.bat
+    echo Frontend dist directory found
+)
+
+if "%COMPRESSOR%"=="7z" (
+    echo Using 7-Zip compression...
+    7z a -tzip "%OUTPUT%" * -x!*.bat -x!node_modules -x!.git -x!.gitignore
+) else if "%COMPRESSOR%"=="winrar" (
+    echo Using WinRAR compression...
+    winrar a -afzip "%OUTPUT%" * -x*.bat -x*node_modules -x*.git -x*.gitignore
+) else if "%COMPRESSOR%"=="powershell" (
+    echo Using PowerShell compression...
+    echo Creating file list for compression...
+    powershell -Command "$items = @(); Get-ChildItem -Path . -Recurse | ForEach-Object { if ($_.Name -notlike '*.bat' -and $_.FullName -notlike '*node_modules*' -and $_.FullName -notlike '*.git*' -and $_.FullName -notlike '*.gitignore*') { $items += $_.FullName } }; Compress-Archive -Path $items -DestinationPath '%OUTPUT%' -Force"
 )
 
 if %errorlevel% equ 0 (
