@@ -1,73 +1,73 @@
 @echo off
 chcp 65001 >nul
 echo ===============================================
-echo    🔧 Chewytta 系统环境检查工具
+echo    Chewytta System Environment Check Tool
 echo ===============================================
 echo.
 
-:: 检查操作系统
-echo [1/6] 检查操作系统版本...
+:: Check operating system
+echo [1/6] Checking operating system version...
 for /f "tokens=4-5 delims=. " %%i in ('ver') do set VERSION=%%i.%%j
-echo ✅ Windows %VERSION%
+echo Windows %VERSION%
 
-:: 检查Docker安装
-echo [2/6] 检查Docker安装...
+:: Check Docker installation
+echo [2/6] Checking Docker installation...
 docker --version >nul 2>&1
 if %errorlevel% neq 0 (
-    echo ❌ Docker未安装或未添加到PATH
-    echo    请下载安装Docker Desktop: https://www.docker.com/products/docker-desktop
+    echo Docker not installed or not added to PATH
+    echo    Please download and install Docker Desktop: https://www.docker.com/products/docker-desktop
     goto :end
 ) else (
-    for /f "tokens=3" %%i in ('docker --version') do echo ✅ Docker %%i 已安装
+    for /f "tokens=3" %%i in ('docker --version') do echo Docker %%i installed
 )
 
-:: 检查Docker服务
-echo [3/6] 检查Docker服务状态...
+:: Check Docker service
+echo [3/6] Checking Docker service status...
 docker ps >nul 2>&1
 if %errorlevel% neq 0 (
-    echo ❌ Docker服务未启动
-    echo    请启动Docker Desktop
+    echo Docker service not started
+    echo    Please start Docker Desktop
     goto :end
 ) else (
-    echo ✅ Docker服务正在运行
+    echo Docker service is running
 )
 
-:: 检查端口占用
-echo [4/6] 检查端口占用情况...
+:: Check port usage
+echo [4/6] Checking port usage...
 netstat -an | findstr ":80 " >nul
 if %errorlevel% equ 0 (
-    echo ⚠️  端口80被占用，可能会影响前端服务
+    echo Warning: Port 80 is occupied, may affect frontend service
 ) else (
-    echo ✅ 端口80可用
+    echo Port 80 available
 )
 
 netstat -an | findstr ":3306 " >nul
 if %errorlevel% equ 0 (
-    echo ⚠️  端口3306被占用，可能会影响MySQL服务
+    echo Warning: Port 3306 is occupied, may affect MySQL service
 ) else (
-    echo ✅ 端口3306可用
+    echo Port 3306 available
 )
 
 netstat -an | findstr ":6379 " >nul
 if %errorlevel% equ 0 (
-    echo ⚠️  端口6379被占用，可能会影响Redis服务
+    echo Warning: Port 6379 is occupied, may affect Redis service
 ) else (
-    echo ✅ 端口6379可用
+    echo Port 6379 available
 )
 
-:: 检查磁盘空间
-echo [5/6] 检查磁盘空间...
+:: Check disk space
+echo [5/6] Checking disk space...
 for /f "tokens=3" %%i in ('dir /-c %cd% 2^>nul ^| findstr "bytes free"') do (
     set FREESPACE=%%i
 )
 if defined FREESPACE (
-    echo ✅ 磁盘空间充足
+    echo Disk space sufficient
 ) else (
-    echo ⚠️  无法检查磁盘空间
+    echo Unable to check disk space
 )
 
-:: 检查内存
-echo [6/6] 检查系统内存...
+:: Check memory
+echo [6/6] Checking system memory...
 for /f "skip=1 tokens=4" %%i in ('wmic computersystem get TotalPhysicalMemory') do (
     if not "%%i"=="" (
         set /a MEMORY=%%i/1024/1024/1024
@@ -76,20 +76,20 @@ for /f "skip=1 tokens=4" %%i in ('wmic computersystem get TotalPhysicalMemory') 
 )
 :memory_done
 if %MEMORY% GEQ 4 (
-    echo ✅ 系统内存: %MEMORY%GB （推荐4GB+）
+    echo System memory: %MEMORY%GB (Recommended 4GB+)
 ) else (
-    echo ⚠️  系统内存: %MEMORY%GB （建议至少4GB）
+    echo Warning: System memory: %MEMORY%GB (Recommend at least 4GB)
 )
 
 echo.
 echo ===============================================
-echo    📋 环境检查完成
+echo    Environment Check Completed
 echo ===============================================
 echo.
-echo 💡 建议：
-echo    - 如有端口冲突，请先停止占用服务
-echo    - 确保Docker Desktop正在运行
-echo    - 关闭不必要的程序释放内存
+echo Recommendations:
+echo    - If there are port conflicts, please stop the occupying services first
+echo    - Ensure Docker Desktop is running
+echo    - Close unnecessary programs to free up memory
 echo.
 
 :end

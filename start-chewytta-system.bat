@@ -1,108 +1,108 @@
 @echo off
 chcp 65001 >nul
 echo ===============================================
-echo    🚀 Chewytta 系统一键启动脚本
+echo    Chewytta System One-Click Start Script
 echo ===============================================
 echo.
 
-:: 检查Docker是否安装
-echo [1/5] 检查Docker环境...
+:: Check if Docker is installed
+echo [1/5] Checking Docker environment...
 docker --version >nul 2>&1
 if %errorlevel% neq 0 (
-    echo ❌ 错误：未检测到Docker！
-    echo    请先安装Docker Desktop并确保其正在运行
-    echo    下载地址：https://www.docker.com/products/docker-desktop
+    echo Error: Docker not detected!
+    echo    Please install Docker Desktop first and ensure it's running
+    echo    Download: https://www.docker.com/products/docker-desktop
     pause
     exit /b 1
 )
-echo ✅ Docker环境检查通过
+echo Docker environment check passed
 
-:: 检查Docker是否运行
-echo [2/5] 检查Docker服务状态...
+:: Check if Docker is running
+echo [2/5] Checking Docker service status...
 docker ps >nul 2>&1
 if %errorlevel% neq 0 (
-    echo ❌ 错误：Docker服务未启动！
-    echo    请启动Docker Desktop后重试
+    echo Error: Docker service not started!
+    echo    Please start Docker Desktop and try again
     pause
     exit /b 1
 )
-echo ✅ Docker服务正在运行
+echo Docker service is running
 
-:: 停止可能存在的旧容器
-echo [3/5] 清理旧的容器...
+:: Stop existing containers if any
+echo [3/5] Cleaning old containers...
 docker-compose down >nul 2>&1
-echo ✅ 旧容器清理完成
+echo Old container cleanup completed
 
-:: 启动所有服务
-echo [4/5] 启动Chewytta系统...
-echo    正在构建和启动容器，首次运行可能需要几分钟...
+:: Start all services
+echo [4/5] Starting Chewytta system...
+echo    Building and starting containers, first run may take several minutes...
 docker-compose up -d --build
 if %errorlevel% neq 0 (
-    echo ❌ 启动失败！请检查错误信息
+    echo Startup failed! Please check error messages
     pause
     exit /b 1
 )
 
-::  等待服务就绪
-echo [5/5] 等待服务启动完成...
-echo    正在等待数据库初始化...
+::  Wait for services to be ready
+echo [5/5] Waiting for services to start...
+echo    Waiting for database initialization...
 timeout /t 15 /nobreak >nul
 
-echo    正在检查后端API服务...
+echo    Checking backend API service...
 :check_backend
 powershell -Command "try { $null = Test-NetConnection -ComputerName localhost -Port 8080 -InformationLevel Quiet; if ($?) { exit 0 } else { exit 1 } } catch { exit 1 }" >nul 2>&1
 if %errorlevel% neq 0 (
-    echo    后端服务还在启动中，请稍候...
+    echo    Backend service is still starting, please wait...
     timeout /t 5 /nobreak >nul
     goto check_backend
 )
-echo ✅ 后端API服务已就绪
+echo Backend API service is ready
 
-echo    正在检查前端服务...
+echo    Checking frontend service...
 :check_frontend  
 powershell -Command "try { $null = Test-NetConnection -ComputerName localhost -Port 80 -InformationLevel Quiet; if ($?) { exit 0 } else { exit 1 } } catch { exit 1 }" >nul 2>&1
 if %errorlevel% neq 0 (
-    echo    前端服务还在启动中，请稍候...
+    echo    Frontend service is still starting, please wait...
     timeout /t 5 /nobreak >nul
     goto check_frontend
 )
-echo ✅ 前端服务已就绪
+echo Frontend service is ready
 
-:: 检查服务状态
+:: Check service status
 echo.
-echo 📋 服务状态检查：
+echo Service Status Check:
 docker-compose ps
 
 echo.
 echo ===============================================
-echo    🎉 Chewytta 系统启动成功！
+echo    Chewytta System Started Successfully!
 echo ===============================================
 echo.
-echo 📝 访问信息：
-echo    🌐 系统地址：http://localhost
-echo    👤 管理员账号：root
-echo    🔑 管理员密码：123456
+echo Access Information:
+echo    System URL: http://localhost
+echo    Admin Account: root
+echo    Admin Password: 123456
 echo.
-echo 🔧 服务端口：
-echo    前端服务：http://localhost (端口80)
-echo    后端API：http://localhost:8080
-echo    MySQL数据库：localhost:3306
-echo    Redis缓存：localhost:6379
+echo Service Ports:
+echo    Frontend Service: http://localhost (Port 80)
+echo    Backend API: http://localhost:8080
+echo    MySQL Database: localhost:3306
+echo    Redis Cache: localhost:6379
 echo.
-echo 💡 提示：
-echo    - 首次启动可能需要等待1-2分钟完成初始化
-echo    - 如需停止系统，请运行"stop-chewytta-system.bat"
-echo    - 如遇问题，请查看操作指南或联系技术支持
+echo Tips:
+echo    - First startup may take 1-2 minutes to complete initialization
+echo    - To stop the system, run "stop-chewytta-system.bat"
+echo    - If you encounter issues, check the operation guide or contact technical support
 echo.
-echo 按任意键打开系统首页...
+echo Press any key to open the system homepage...
 pause >nul
 
-:: 打开浏览器前再确保服务稳定
-echo 正在准备打开系统界面...
+:: Open browser after ensuring service stability
+echo Preparing to open system interface...
 timeout /t 3 /nobreak >nul
 
-:: 打开浏览器
+:: Open browser
 start http://localhost
 
-echo 系统已在浏览器中打开，祝您使用愉快！
+echo System opened in browser, enjoy using it!
 timeout /t 3 >nul

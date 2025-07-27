@@ -1,52 +1,52 @@
 @echo off
 chcp 65001 >nul
 echo ===============================================
-echo    🔧 Chewytta 文件访问测试脚本
+echo    Chewytta File Access Test Script
 echo ===============================================
 echo.
 
-echo [1/4] 测试后端API连接...
-powershell -Command "try { $response = Invoke-WebRequest -Uri 'http://localhost:8080/api/auth/login' -Method POST -ContentType 'application/json' -Body '{}' -UseBasicParsing; Write-Host '✅ 后端API可访问 (状态码:' $response.StatusCode ')' } catch { Write-Host '⚠️  后端API响应:' $_.Exception.Response.StatusCode }"
+echo [1/4] Testing backend API connection...
+powershell -Command "try { $response = Invoke-WebRequest -Uri 'http://localhost:8080/api/auth/login' -Method POST -ContentType 'application/json' -Body '{}' -UseBasicParsing; Write-Host 'Backend API accessible (Status code:' $response.StatusCode ')' } catch { Write-Host 'Backend API response:' $_.Exception.Response.StatusCode }"
 
 echo.
-echo [2/4] 测试前端服务...
-powershell -Command "try { $response = Invoke-WebRequest -Uri 'http://localhost' -UseBasicParsing; Write-Host '✅ 前端服务可访问 (状态码:' $response.StatusCode ')' } catch { Write-Host '❌ 前端服务错误:' $_.Exception.Message }"
+echo [2/4] Testing frontend service...
+powershell -Command "try { $response = Invoke-WebRequest -Uri 'http://localhost' -UseBasicParsing; Write-Host 'Frontend service accessible (Status code:' $response.StatusCode ')' } catch { Write-Host 'Frontend service error:' $_.Exception.Message }"
 
 echo.
-echo [3/4] 测试admin-content路径代理...
-powershell -Command "try { $response = Invoke-WebRequest -Uri 'http://localhost/admin-content/' -UseBasicParsing; Write-Host '✅ admin-content路径可访问 (状态码:' $response.StatusCode ')' } catch { Write-Host '⚠️  admin-content响应:' $_.Exception.Response.StatusCode }"
+echo [3/4] Testing admin-content path proxy...
+powershell -Command "try { $response = Invoke-WebRequest -Uri 'http://localhost/admin-content/' -UseBasicParsing; Write-Host 'admin-content path accessible (Status code:' $response.StatusCode ')' } catch { Write-Host 'admin-content response:' $_.Exception.Response.StatusCode }"
 
 echo.
-echo [4/4] 测试uploads路径代理...
-powershell -Command "try { $response = Invoke-WebRequest -Uri 'http://localhost/uploads/' -UseBasicParsing; Write-Host '✅ uploads路径可访问 (状态码:' $response.StatusCode ')' } catch { Write-Host '⚠️  uploads路径响应:' $_.Exception.Response.StatusCode }"
+echo [4/4] Testing uploads path proxy...
+powershell -Command "try { $response = Invoke-WebRequest -Uri 'http://localhost/uploads/' -UseBasicParsing; Write-Host 'uploads path accessible (Status code:' $response.StatusCode ')' } catch { Write-Host 'uploads path response:' $_.Exception.Response.StatusCode }"
 
 echo.
 echo ===============================================
-echo    📋 文件目录检查
+echo    File Directory Check
 echo ===============================================
-echo AdminContent目录:
+echo AdminContent directory:
 if exist "AdminContent" (
-    echo ✅ AdminContent 目录存在
-    dir /AD AdminContent 2>nul | find /C "个目录" >nul && echo    包含子目录
+    echo AdminContent directory exists
+    dir /AD AdminContent 2>nul | find /C "directories" >nul && echo    Contains subdirectories
 ) else (
-    echo ❌ AdminContent 目录不存在
+    echo AdminContent directory does not exist
 )
 
 echo.
-echo ChewyApp目录:
+echo ChewyApp directory:
 if exist "ChewyApp" (
-    echo ✅ ChewyApp 目录存在
-    dir /AD ChewyApp 2>nul | find /C "个目录" >nul && echo    包含子目录
+    echo ChewyApp directory exists
+    dir /AD ChewyApp 2>nul | find /C "directories" >nul && echo    Contains subdirectories
 ) else (
-    echo ❌ ChewyApp 目录不存在
+    echo ChewyApp directory does not exist
 )
 
 echo.
 echo ===============================================
-echo    测试完成！
+echo    Test Completed!
 echo ===============================================
-echo 如果看到❌错误，请检查容器状态和配置
-echo 运行 docker-compose ps 查看容器状态
-echo 运行 docker-compose logs [service] 查看日志
+echo If you see errors, please check container status and configuration
+echo Run docker-compose ps to view container status
+echo Run docker-compose logs [service] to view logs
 echo.
 pause

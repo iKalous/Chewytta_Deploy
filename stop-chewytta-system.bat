@@ -1,41 +1,41 @@
 @echo off
 chcp 65001 >nul
 echo ===============================================
-echo    🛑 Chewytta 系统一键关闭脚本
+echo    Chewytta System One-Click Stop Script
 echo ===============================================
 echo.
 
-:: 检查Docker是否安装
+:: Check if Docker is installed
 docker --version >nul 2>&1
 if %errorlevel% neq 0 (
-    echo ❌ 错误：未检测到Docker！
+    echo Error: Docker not detected!
     pause
     exit /b 1
 )
 
-echo [1/3] 正在停止Chewytta系统...
+echo [1/3] Stopping Chewytta system...
 docker-compose down
 
-echo [2/3] 清理临时资源...
+echo [2/3] Cleaning temporary resources...
 docker system prune -f >nul 2>&1
 
-echo [3/3] 检查停止状态...
+echo [3/3] Checking stop status...
 docker-compose ps
 
 echo.
 echo ===============================================
-echo    ✅ Chewytta 系统已成功关闭！
+echo    Chewytta System Successfully Stopped!
 echo ===============================================
 echo.
-echo 📋 系统状态：
-echo    🔴 所有服务已停止
-echo    🧹 临时资源已清理
-echo    💾 数据已保存（下次启动时会自动恢复）
+echo System Status:
+echo    All services stopped
+echo    Temporary resources cleaned
+echo    Data saved (will be automatically restored on next startup)
 echo.
-echo 💡 提示：
-echo    - 系统数据已安全保存，下次启动时会自动恢复
-echo    - 如需重新启动，请运行"start-chewytta-system.bat"
-echo    - 如需完全清理（包括数据），请手动执行 docker-compose down -v
+echo Tips:
+echo    - System data has been safely saved and will be automatically restored on next startup
+echo    - To restart, run "start-chewytta-system.bat"
+echo    - For complete cleanup (including data), manually execute: docker-compose down -v
 echo.
-echo 感谢使用 Chewytta 系统！
+echo Thank you for using Chewytta system!
 pause
