@@ -91,7 +91,7 @@ echo    Redis缓存：localhost:6379
 echo.
 echo 💡 提示：
 echo    - 首次启动可能需要等待1-2分钟完成初始化
-echo    - 如需停止系统，请运行"🛑 一键关闭 Chewytta 系统.bat"
+echo    - 如需停止系统，请运行"stop-chewytta-system.bat"
 echo    - 如遇问题，请查看操作指南或联系技术支持
 echo.
 echo 按任意键打开系统首页...

@@ -34,7 +34,7 @@ echo    💾 数据已保存（下次启动时会自动恢复）
 echo.
 echo 💡 提示：
 echo    - 系统数据已安全保存，下次启动时会自动恢复
-echo    - 如需重新启动，请运行"🚀 一键启动 Chewytta 系统.bat"
+echo    - 如需重新启动，请运行"start-chewytta-system.bat"
 echo    - 如需完全清理（包括数据），请手动执行 docker-compose down -v
 echo.
 echo 感谢使用 Chewytta 系统！

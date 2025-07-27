@@ -61,7 +61,7 @@ echo 📁 文件位置: %cd%
 echo.
 echo 💡 提示：
 echo    - 可以将此压缩包分享给其他用户
-echo    - 解压后运行"🚀 一键启动 Chewytta 系统.bat"即可使用
+echo    - 解压后运行"start-chewytta-system.bat"即可使用
 echo    - 确保目标机器已安装Docker Desktop
 echo.
 pause
