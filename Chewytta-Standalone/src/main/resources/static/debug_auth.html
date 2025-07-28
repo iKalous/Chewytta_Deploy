@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Debug Auth</title>
+</head>
+
+<body>
+    <h1>认证调试</h1>
+    <div id="auth-info"></div>
+
+    <script>
+        const token = localStorage.getItem('token');
+        const role = localStorage.getItem('role');
+        const username = localStorage.getItem('username');
+        const isLoggedIn = localStorage.getItem('isLoggedIn');
+
+        document.getElementById('auth-info').innerHTML = `
+            <p><strong>Token:</strong> ${token ? token.substring(0, 30) + '...' : 'No token'}</p>
+            <p><strong>Role:</strong> ${role || 'No role'}</p>
+            <p><strong>Username:</strong> ${username || 'No username'}</p>
+            <p><strong>Is Logged In:</strong> ${isLoggedIn || 'No'}</p>
+        `;
+
+        // 测试API调用
+        if (token) {
+            fetch('/api/admin/boxes', {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(response => {
+                    console.log('API Response Status:', response.status);
+                    console.log('API Response Headers:', response.headers);
+                    return response.text();
+                })
+                .then(text => {
+                    console.log('API Response Text:', text);
+                    const debugDiv = document.createElement('div');
+                    debugDiv.innerHTML = `
+                    <h2>API 调用结果:</h2>
+                    <pre>${text}</pre>
+                `;
+                    document.body.appendChild(debugDiv);
+                })
+                .catch(error => {
+                    console.error('API Error:', error);
+                    const debugDiv = document.createElement('div');
+                    debugDiv.innerHTML = `
+                    <h2>API 错误:</h2>
+                    <pre>${error.message}</pre>
+                `;
+                    document.body.appendChild(debugDiv);
+                });
+        }
+    </script>
+</body>
+
+</html>

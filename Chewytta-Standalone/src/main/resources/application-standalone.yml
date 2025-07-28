@@ -1,0 +1,75 @@
+spring:
+  application:
+    name: Chewytta-Standalone
+  
+  # SQLite 数据库配置
+  datasource:
+    url: jdbc:sqlite:./chewytta.db
+    driver-class-name: org.sqlite.JDBC
+    # SQLite 不需要用户名和密码
+    username: 
+    password: 
+    
+  # JPA 配置
+  jpa:
+    database-platform: org.hibernate.dialect.SQLiteDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    
+  # SQL 初始化配置
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:schema-sqlite.sql
+      data-locations: classpath:data-sqlite.sql
+      continue-on-error: false
+
+  # Redis 配置（嵌入式）
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      password: 
+      timeout: 5000ms
+      connect-timeout: 5000ms
+      lettuce:
+        pool:
+          max-active: 8
+          max-idle: 8
+          min-idle: 0
+          max-wait: 3000ms
+        shutdown-timeout: 5000ms
+
+# 服务器配置
+server:
+  port: 8080
+  servlet:
+    context-path: /
+
+# 应用配置
+app:
+  jwt:
+    secret: 3AvVhdsgjWTdGxU4ajXlqiu2ZMECAfGRovuJvPzhwoE=
+    expiration: 604800000
+
+# 文件上传配置
+spring.servlet.multipart:
+  max-file-size: 50MB
+  max-request-size: 50MB
+
+# 静态资源配置
+spring.web.resources:
+  static-locations: classpath:/static/,classpath:/public/,file:./uploads/
+
+# 日志配置
+logging:
+  level:
+    web.project.chewytta: INFO
+    org.springframework.security: WARN
+    org.hibernate.SQL: WARN
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+  file:
+    name: ./logs/chewytta-standalone.log

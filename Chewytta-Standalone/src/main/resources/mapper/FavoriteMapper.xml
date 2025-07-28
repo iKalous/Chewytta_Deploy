@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="web.project.chewytta.mapper.FavoriteMapper">
+
+    <!-- 查询用户所有收藏 -->
+    <select id="selectByUserId" resultType="web.project.chewytta.model.Favorite">
+        SELECT * FROM favorites WHERE user_id = #{userId}
+    </select>
+
+    <!-- 判断是否已收藏 -->
+    <select id="selectByUserAndBoxId" resultType="web.project.chewytta.model.Favorite">
+        SELECT * FROM favorites WHERE user_id = #{userId} AND box_id = #{boxId}
+    </select>
+
+    <!-- 新增收藏 -->
+    <insert id="insertFavorite">
+        INSERT INTO favorites (user_id, box_id, created_at)
+        VALUES (#{userId}, #{boxId}, NOW())
+    </insert>
+
+    <!-- 删除收藏 -->
+    <delete id="deleteById">
+        DELETE FROM favorites WHERE id = #{id}
+    </delete>
+
+    <!-- 检查用户是否已收藏盲盒 -->
+    <select id="isFavorited" resultType="boolean">
+        SELECT COUNT(*) > 0
+        FROM favorites
+        WHERE user_id = #{userId} AND box_id = #{boxId}
+    </select>
+
+    <!-- 添加收藏 -->
+    <insert id="addFavorite">
+        INSERT INTO favorites (user_id, box_id, created_at)
+        VALUES (#{userId}, #{boxId}, NOW())
+    </insert>
+
+    <!-- 取消收藏 -->
+    <delete id="removeFavorite">
+        DELETE FROM favorites
+        WHERE user_id = #{userId} AND box_id = #{boxId}
+    </delete>
+
+</mapper>
